@@ -33,8 +33,8 @@ public class AuthController {
 
     }
 
-    @PostMapping("/validateToken")
-    public ResponseEntity<ResponseDto<Boolean>> validateToken(@RequestBody String accessToken) {
+    @PostMapping("/validate")
+    public ResponseEntity<ResponseDto<String>> validateToken(@RequestBody String accessToken) {
 
         return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.forSuccess(authService.validateAccessToken(accessToken)));
 

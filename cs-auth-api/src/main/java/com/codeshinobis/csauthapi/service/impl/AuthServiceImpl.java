@@ -49,7 +49,7 @@ public class AuthServiceImpl implements AuthService {
         return token;
     }
 
-    public boolean validateAccessToken(String token) {
+    public String validateAccessToken(String token) {
 
         Key hmacKey = getKey();
 
@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService {
         if(jwt == null || jwt.getBody() == null || jwt.getBody().get("userId") == null) {
             throw new TokenException("Access token is invalid");
         }
-        return true;
+        return jwt.getBody().get("userId").toString();
 
     }
 
