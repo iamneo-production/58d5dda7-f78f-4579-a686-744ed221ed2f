@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/exchange-api")
+@RequestMapping(value = "/api/currency-exchange")
 @Slf4j
 public class ExchangeController {
 

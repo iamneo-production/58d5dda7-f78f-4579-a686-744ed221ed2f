@@ -19,41 +19,41 @@ spring:
         - id: cs-currency-exchange-api
           uri: lb://cs-currency-exchange-api
           predicates:
-            - Path=/api/cs/exchange-api/**
+            - Path=/api/cs/currency-exchange/**
           filters:
-            - RewritePath=/api/cs/exchange-api/(?<ResourcePath>.*), /api/exchange-api/$\{ResourcePath}
+            - RewritePath=/api/cs/currency-exchange/(?<ResourcePath>.*), /api/currency-exchange/$\{ResourcePath}
 
         - id: cs-currency-rates-api
           uri: lb://cs-currency-rates-api
           predicates:
-            - Path=/api/cs/rates-api/**
+            - Path=/api/cs/currency-rates/**
           filters:
-            - RewritePath=/api/cs/rates-api/(?<ResourcePath>.*), /api/rates-api/$\{ResourcePath}
+            - RewritePath=/api/cs/currency-rates/(?<ResourcePath>.*), /api/currency-rates/$\{ResourcePath}
 
         - id: cs-auth-api
           uri: lb://cs-auth-api
           predicates:
-            - Path=/api/cs/auth-api/**
+            - Path=/api/cs/auth/**
           filters:
-            - RewritePath=/api/cs/auth-api/(?<ResourcePath>.*), /api/auth-api/$\{ResourcePath}
+            - RewritePath=/api/cs/auth/(?<ResourcePath>.*), /api/auth/$\{ResourcePath}
 
         - id: cs-user-profile-api
           uri: lb://cs-user-profile-api
           predicates:
-            - Path=/api/cs/user-profile-api/**
+            - Path=/api/cs/user-profile/**
           filters:
-            - RewritePath=/api/cs/user-profile-api/(?<ResourcePath>.*), /api/user-profile-api/$\{ResourcePath}
+            - RewritePath=/api/cs/user-profile/(?<ResourcePath>.*), /api/user-profile/$\{ResourcePath}
 
         - id: cs-transaction-api
           uri: lb://cs-transaction-api
           predicates:
-            - Path=/api/cs/transaction-api/**
+            - Path=/api/cs/exchange-transactions/**
           filters:
-            - RewritePath=/api/cs/transaction-api/(?<ResourcePath>.*), /api/transaction-api/$\{ResourcePath}
+            - RewritePath=/api/cs/exchange-transactions/(?<ResourcePath>.*), /api/exchange-transactions/$\{ResourcePath}
 
         - id: cs-logger-api
           uri: lb://cs-logger-api
           predicates:
-            - Path=/api/cs/logger-api/**
+            - Path=/api/cs/logger/**
           filters:
-            - RewritePath=/api/cs/logger-api/(?<ResourcePath>.*), /api/logger-api/$\{ResourcePath}
+            - RewritePath=/api/cs/logger/(?<ResourcePath>.*), /api/logger/$\{ResourcePath}
