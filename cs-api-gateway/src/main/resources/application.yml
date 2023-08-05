@@ -1,0 +1,59 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+
+spring:
+  application:
+    name: cs-api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: cs-currency-exchange-api
+          uri: lb://cs-currency-exchange-api
+          predicates:
+            - Path=/api/cs/exchange-api/**
+          filters:
+            - RewritePath=/api/cs/exchange-api/(?<ResourcePath>.*), /api/exchange-api/$\{ResourcePath}
+
+        - id: cs-currency-rates-api
+          uri: lb://cs-currency-rates-api
+          predicates:
+            - Path=/api/cs/rates-api/**
+          filters:
+            - RewritePath=/api/cs/rates-api/(?<ResourcePath>.*), /api/rates-api/$\{ResourcePath}
+
+        - id: cs-auth-api
+          uri: lb://cs-auth-api
+          predicates:
+            - Path=/api/cs/auth-api/**
+          filters:
+            - RewritePath=/api/cs/auth-api/(?<ResourcePath>.*), /api/auth-api/$\{ResourcePath}
+
+        - id: cs-user-profile-api
+          uri: lb://cs-user-profile-api
+          predicates:
+            - Path=/api/cs/user-profile-api/**
+          filters:
+            - RewritePath=/api/cs/user-profile-api/(?<ResourcePath>.*), /api/user-profile-api/$\{ResourcePath}
+
+        - id: cs-transaction-api
+          uri: lb://cs-transaction-api
+          predicates:
+            - Path=/api/cs/transaction-api/**
+          filters:
+            - RewritePath=/api/cs/transaction-api/(?<ResourcePath>.*), /api/transaction-api/$\{ResourcePath}
+
+        - id: cs-logger-api
+          uri: lb://cs-logger-api
+          predicates:
+            - Path=/api/cs/logger-api/**
+          filters:
+            - RewritePath=/api/cs/logger-api/(?<ResourcePath>.*), /api/logger-api/$\{ResourcePath}
