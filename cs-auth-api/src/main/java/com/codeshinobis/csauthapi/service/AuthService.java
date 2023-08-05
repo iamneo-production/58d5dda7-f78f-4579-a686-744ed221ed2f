@@ -9,5 +9,5 @@ public interface AuthService {
 
     boolean validateUser(AuthRequest request);
 
-    boolean validateAccessToken(String token);
+    String validateAccessToken(String token);
 }
