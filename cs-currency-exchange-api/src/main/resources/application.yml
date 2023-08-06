@@ -18,3 +18,10 @@ api:
   client:
     ratesApiUrl: http://cs-currency-rates-api
     transactionApiUrl: http://cs-transaction-api
+
+# resilience4j:
+#   retry:
+#    instances:
+#       apiGatewayRetry:
+#         max-attempts: 3
+#         wait-duration: 5s
