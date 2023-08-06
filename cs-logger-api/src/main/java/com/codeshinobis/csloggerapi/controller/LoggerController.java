@@ -1,29 +1,26 @@
 package com.codeshinobis.csloggerapi.controller;
 
-import com.codeshinobis.csloggerapi.model.LoggerDto;
-import com.codeshinobis.csloggerapi.model.ResponseDto;
+import com.codeshinobis.csloggerapi.model.LogDto;
 import com.codeshinobis.csloggerapi.service.LoggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/api/logger")
 public class LoggerController {
 
-    private LoggerService service;
-
     @Autowired
-    public LoggerController(LoggerService service) {
-        this.service = service;
-    }
+    private LoggerService loggerService;
 
     @PostMapping("/log")
-    public ResponseEntity<ResponseDto<String>> logger(@RequestBody LoggerDto dto) {
-        service.logging(dto.getMessage(), dto.getLevel(), dto.getClassName(), dto.getMethodName());
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.forSuccess("Logging Successful"));
+    public ResponseEntity<Void> logger(@RequestBody LogDto logData) {
+        loggerService.log(logData);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }
