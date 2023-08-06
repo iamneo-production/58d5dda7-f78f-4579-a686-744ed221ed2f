@@ -4,10 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jdk.jfr.DataAmount;
 import lombok.Builder;
 import lombok.Data;
 
 @Entity
+@Data
+@Builder
 public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
