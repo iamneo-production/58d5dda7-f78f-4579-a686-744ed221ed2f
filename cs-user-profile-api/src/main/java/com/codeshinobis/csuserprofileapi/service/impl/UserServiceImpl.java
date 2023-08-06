@@ -39,13 +39,13 @@ public class UserServiceImpl implements UserService {
         if(existingUser != null) {
             throw new InvalidRequestException("UserId is already Exist");
         }
-        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
-        encryptor.setPassword(secret);
-        String encryptedPassword = encryptor.encrypt(user.getPassword());
+        // StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        // encryptor.setPassword(secret);
+        // String encryptedPassword = encryptor.encrypt(user.getPassword());
         User userEntity = new User();
         userEntity.setName(user.getName());
         userEntity.setUserId(user.getUserId());
-        userEntity.setPassword(encryptedPassword);
+        userEntity.setPassword(user.getPassword());
         repo.save(userEntity);
     }
 

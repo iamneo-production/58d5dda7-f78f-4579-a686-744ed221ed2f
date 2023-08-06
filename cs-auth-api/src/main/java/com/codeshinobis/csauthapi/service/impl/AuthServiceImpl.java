@@ -88,11 +88,11 @@ public class AuthServiceImpl implements AuthService {
 
         User user = clientResponse.getBody().getData();
         
-        StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
-        decryptor.setPassword(secret);
-        String decryptedPassword = decryptor.decrypt(user.getPassword());
+        // StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+        // decryptor.setPassword(secret);
+        // String decryptedPassword = decryptor.decrypt(user.getPassword());
 
-        if(!decryptedPassword.equals(request.getPassword())) {
+        if(!user.getPassword().equals(request.getPassword())) {
             throw new InvalidRequestException("Password Mismatch");
         }
         return true;
