@@ -1,5 +1,6 @@
 package com.codeshinobis.cscurrencyratesapi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,14 @@ public class CurrencyRatesService {
 	
 	 public Optional<CurrencyExchangeRates> getCurrencyRate(String sourceCurrency, String targetCurrency) {
 	        return repo.findBySourceCurrencyAndTargetCurrency(sourceCurrency, targetCurrency);
+	 }
+	 
+	 public List<CurrencyExchangeRates> getCurrencyBySourceCurrency(String sourceCurrency) {
+		 return repo.findBySourceCurrency(sourceCurrency);
+	 }
+	 
+	 public List<CurrencyExchangeRates> getCurrencyByTargetCurrency(String sourceCurrency) {
+		 return repo.findBySourceCurrency(sourceCurrency);
 	 }
 
 }
