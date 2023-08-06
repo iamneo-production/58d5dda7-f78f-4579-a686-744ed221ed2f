@@ -1,4 +1,4 @@
-package com.codeshinobis.cscurrencyratesapi.model;
+package com.codeshinobis.csloggerapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

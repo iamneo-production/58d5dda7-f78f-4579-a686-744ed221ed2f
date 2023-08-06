@@ -18,5 +18,5 @@ public interface CurrencyExchangeRatesRepo extends JpaRepository<CurrencyExchang
 	List<CurrencyExchangeRates> findBySourceCurrency(String sourceCurrency);
 	
 	List<CurrencyExchangeRates> findByTargetCurrency(String targetCurrency);
-	
+
 }
