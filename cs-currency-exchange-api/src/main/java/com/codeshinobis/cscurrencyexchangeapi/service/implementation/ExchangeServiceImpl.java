@@ -1,12 +1,11 @@
 package com.codeshinobis.cscurrencyexchangeapi.service.implementation;
 
+import com.codeshinobis.cscurrencyexchangeapi.client.ApiGatewayClient;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.codeshinobis.cscurrencyexchangeapi.client.RatesApiClient;
-import com.codeshinobis.cscurrencyexchangeapi.client.TransactionApiClient;
 import com.codeshinobis.cscurrencyexchangeapi.client.request.TransactionRequest;
 import com.codeshinobis.cscurrencyexchangeapi.client.response.RatesResponse;
 import com.codeshinobis.cscurrencyexchangeapi.mapper.TransactionToExchangeResponseMapper;
@@ -20,10 +19,7 @@ import com.codeshinobis.cscurrencyexchangeapi.service.ExchangeService;
 public class ExchangeServiceImpl implements ExchangeService {
 
     @Autowired
-    private RatesApiClient ratesApiClient;
-    
-    @Autowired
-    private TransactionApiClient transactionApiClient;
+    private ApiGatewayClient apiGatewayClient;
     
     @Override
     public ResponseDto<ExchangeResponse> createExchangeTransaction(String userID, ExchangeRequest exchangeRequest) {
@@ -31,7 +27,7 @@ public class ExchangeServiceImpl implements ExchangeService {
             exchangeRequest.getSourceCurrency(), exchangeRequest.getTargetCurrency(), exchangeRequest.getAmount());
         
         RatesResponse ratesResponse = 
-            ratesApiClient.getExchangeRate(exchangeRequest.getSourceCurrency(), exchangeRequest.getTargetCurrency()).getData();
+            apiGatewayClient.getExchangeRate(exchangeRequest.getSourceCurrency(), exchangeRequest.getTargetCurrency()).getData();
         double convertedAmount = this.convertCurrency(exchangeRequest.getAmount(), ratesResponse.getExchangeRate());
         log.info("Exchange Rate - {} | Converted Amount - {}", ratesResponse.getExchangeRate(), convertedAmount);
 
@@ -44,7 +40,7 @@ public class ExchangeServiceImpl implements ExchangeService {
         transactionRequest.setExchangeRate(ratesResponse.getExchangeRate());
 
         ExchangeResponse exchangeResponse = 
-            TransactionToExchangeResponseMapper.INSTANCE.map(transactionApiClient.createTransaction(transactionRequest).getData());
+            TransactionToExchangeResponseMapper.INSTANCE.map(apiGatewayClient.createTransaction(transactionRequest).getData());
         log.info("Transaction ID - {}", exchangeResponse.getTransactionID());
 
         return ResponseDto.forSuccess(exchangeResponse);

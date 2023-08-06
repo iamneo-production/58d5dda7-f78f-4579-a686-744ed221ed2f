@@ -1,5 +1,7 @@
 package com.codeshinobis.cscurrencyexchangeapi.controller;
 
+import com.codeshinobis.cscurrencyexchangeapi.client.ApiGatewayClient;
+import com.codeshinobis.cscurrencyexchangeapi.model.LogDto;
 import lombok.extern.slf4j.Slf4j;
 
 import com.codeshinobis.cscurrencyexchangeapi.exception.CsErrorCodes;
@@ -28,10 +30,13 @@ public class ExchangeController {
     @Autowired
     private ExchangeService exchangeService;
 
+    @Autowired
+    private ApiGatewayClient apiGatewayClient;
+
     @PostMapping("/exchange")
     public ResponseEntity<ResponseDto<ExchangeResponse>> exchangeCurrency(HttpServletRequest request, 
                         @RequestBody ExchangeRequest exchangeRequest) throws CsException {
-        String userID = request.getHeader("USER_ID");
+        String userID = (String) request.getAttribute("USER_ID");
         validateExchangeRequest(exchangeRequest);
         validateUserID(userID);
         return ResponseEntity.ok(exchangeService.createExchangeTransaction(userID, exchangeRequest));
@@ -43,6 +48,8 @@ public class ExchangeController {
                 || StringUtils.isBlank(exchangeRequest.getTargetCurrency())
                 || exchangeRequest.getAmount() <= 0) {
             log.info("Invalid Exchange Request Fields");
+            apiGatewayClient.sendLog(new LogDto("Exchange-API","ERROR",
+                "ExchangeController", "Invalid Exchange Request Fields"));
             throw new CsException(CsErrorCodes.INVALID_REQUEST);
         }
     }

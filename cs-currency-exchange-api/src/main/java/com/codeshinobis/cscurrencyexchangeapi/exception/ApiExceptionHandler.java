@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.codeshinobis.cscurrencyexchangeapi.client.ApiGatewayClient;
+import com.codeshinobis.cscurrencyexchangeapi.model.LogDto;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,9 +17,13 @@ import com.codeshinobis.cscurrencyexchangeapi.model.ErrorDto;
 import com.codeshinobis.cscurrencyexchangeapi.model.ResponseDto;
 
 @RestControllerAdvice
+@Slf4j
 public class ApiExceptionHandler {
 
     private final Map<CsErrorCodes,ErrorDto> errorCodeMap;
+
+    @Autowired
+    private ApiGatewayClient apiGatewayClient;
 
     public ApiExceptionHandler() {
         this.errorCodeMap = registerErrorCodeMap();
@@ -23,6 +31,9 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(CsException.class)
     public ResponseEntity<ResponseDto<Object>> handleCsException(CsException csException) {
+        log.error(csException.getMessage());
+        apiGatewayClient.sendLog(new LogDto("Exchange-API","ERROR",
+                "ApiExceptionHandler", csException.getMessage()));
         ResponseDto<Object> responseBody = 
             ResponseDto.forError(Collections.singletonList(
                 this.errorCodeMap.getOrDefault(csException.getCode(), this.errorCodeMap.get(CsErrorCodes.UNKNOWN_ERROR))));
@@ -31,10 +42,13 @@ public class ApiExceptionHandler {
     
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ResponseDto<Object>> handleException(Exception exception) {
+        log.error(exception.getMessage());
+        apiGatewayClient.sendLog(new LogDto("Exchange-API","ERROR",
+                "ApiExceptionHandler", exception.getMessage()));
         ResponseDto<Object> responseBody = 
             ResponseDto.forError(Collections.singletonList(
                 this.errorCodeMap.get(CsErrorCodes.UNKNOWN_ERROR)));
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseBody);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseBody);
     }
 
     private Map<CsErrorCodes,ErrorDto> registerErrorCodeMap() {

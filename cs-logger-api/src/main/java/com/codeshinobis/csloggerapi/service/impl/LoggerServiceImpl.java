@@ -1,21 +1,20 @@
 package com.codeshinobis.csloggerapi.service.impl;
 
+import com.codeshinobis.csloggerapi.model.LogDto;
 import com.codeshinobis.csloggerapi.service.LoggerService;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.event.Level;
 import org.springframework.stereotype.Service;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 @Service
+@Slf4j
 public class LoggerServiceImpl implements LoggerService {
 
-    Logger logger = Logger.getLogger("LoggerService");
-
     @Override
-    public void logging(String message, String level, String className, String methodName) {
-        if(level.equalsIgnoreCase("error")) {
-            level = "SEVERE";
-        }
-        logger.logp(Level.parse(level), className, methodName, message);
+    public void log(LogDto logData) {
+        log.atLevel(Level.valueOf(logData.getLevel()))
+                .log("Service : {} | Class : {} | Message : {}",
+                        logData.getServiceID(), logData.getClassName(), logData.getMessage());
     }
+
 }
