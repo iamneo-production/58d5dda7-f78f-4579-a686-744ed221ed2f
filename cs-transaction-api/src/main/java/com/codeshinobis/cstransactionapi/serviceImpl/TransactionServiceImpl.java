@@ -31,6 +31,34 @@ public class TransactionServiceImpl implements TransactionService {
 	final Logger logger= LoggerFactory.getLogger(TransactionService.class);
 
 
+	@Override
+	public TransactionResponse createTransaction(TransactionRequest transactionRequest) {
+		
+		
+		
+		if( transactionRequest==null) throw new IllegalArgumentException();
+		Transaction transaction=modelMapper.map(transactionRequest, Transaction.class);
+		logger.info("transaction is :"+transaction);
+		
+		String ldt=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+		transaction.setTransactionDateTime(ldt);
+		logger.info("time added to transaction : "+ transaction);
+		
+		Transaction response=transactionRepo.save(transaction);
+		logger.info("save transaction : "+ response);
+		return  new TransactionResponse("success",response,null);
+		
+		
+	}
+
+	@Override
+	public Transaction getSingleTransaction(Long transactionId) {
+		Optional<Transaction> res=transactionRepo.findById(transactionId);
+		if(res.isPresent()) return res.get();
+//		else throw new TransactionNotFoundException();
+		else return null;
+		
+	}
 
 	@Override
 	public ResponseEntity<List<Transaction>> getAllTransaction() {
