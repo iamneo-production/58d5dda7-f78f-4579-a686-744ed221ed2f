@@ -1,5 +1,7 @@
 package com.codeshinobis.csauthapi.service.impl;
 
+import com.codeshinobis.csauthapi.client.UserAPI;
+import com.codeshinobis.csauthapi.client.model.User;
 import com.codeshinobis.csauthapi.exception.InvalidRequestException;
 import com.codeshinobis.csauthapi.exception.TokenException;
 import com.codeshinobis.csauthapi.model.AuthRequest;
@@ -10,6 +12,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -23,6 +26,9 @@ import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private UserAPI apiService;
 
     String secret = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
 
@@ -69,6 +75,12 @@ public class AuthServiceImpl implements AuthService {
         if(Objects.isNull(request) || StringUtils.isBlank(request.getUserId()) || StringUtils.isBlank(request.getPassword())) {
             throw new InvalidRequestException("Invalid User Request");
         }
+
+        User user = apiService.getUser(request.getUserId());
+        if(user.getPassword() != request.getPassword()) {
+            throw new InvalidRequestException("Password Mismatch");
+        }
+
         return true;
     }
     
