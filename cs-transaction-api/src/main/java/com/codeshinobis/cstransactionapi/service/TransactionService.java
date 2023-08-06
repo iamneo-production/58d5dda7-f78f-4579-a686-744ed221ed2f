@@ -13,7 +13,7 @@ public interface TransactionService {
 	public TransactionResponse createTransaction(TransactionRequest transactionRequest);
 	public Transaction getSingleTransaction(Long transactionid);
 	public ResponseEntity<List<Transaction>> getAllTransaction();
-	public ResponseEntity<List<Transaction>> getAllTransactionByUserId(String userId);
+	public List<Transaction> getAllTransactionByUserId(String userId);
 	
 
 }

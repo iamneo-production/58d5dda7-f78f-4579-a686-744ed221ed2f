@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.codeshinobis.cstransactionapi.custom.TransactionNotFoundException;
 import com.codeshinobis.cstransactionapi.dto.TransactionRequest;
 import com.codeshinobis.cstransactionapi.dto.TransactionResponse;
 import com.codeshinobis.cstransactionapi.entity.Transaction;
@@ -68,21 +69,18 @@ public class TransactionServiceImpl implements TransactionService {
 	}
 
 	@Override
-	public ResponseEntity<List<Transaction>> getAllTransactionByUserId(String userId) {
+	public List<Transaction> getAllTransactionByUserId(String userId) {
 		
 		try {
-			
 			logger.info("transaction by userid");
 			System.out.println(this.transactionRepo.getByUserID(userId));
-			if(this.transactionRepo.getByUserID(userId).size() > 0) return new ResponseEntity<List<Transaction>>(this.transactionRepo.getAllByUserID(userId), HttpStatus.OK);
-			return new ResponseEntity<List<Transaction>>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
-			//throw new Exception("something");
-			
+			if(this.transactionRepo.getByUserID(userId).size() > 0) return this.transactionRepo.getAllByUserID(userId);
+			return null;			
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 		}
 		
-		return new ResponseEntity<List<Transaction>>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
+		return null;
 	}
 
 	private Transaction mapTransaction(TransactionRequest request) {

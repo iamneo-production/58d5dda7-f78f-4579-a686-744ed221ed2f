@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.codeshinobis.csuserprofileapi.client.TransactionAPI;
 import com.codeshinobis.csuserprofileapi.exception.ClientException;
 import com.codeshinobis.csuserprofileapi.exception.InvalidRequestException;
+import com.codeshinobis.csuserprofileapi.model.ResponseDto;
 import com.codeshinobis.csuserprofileapi.model.UserDetail;
 import com.codeshinobis.csuserprofileapi.model.UserDetailResponse;
 import com.codeshinobis.csuserprofileapi.model.UserRequest;
@@ -67,11 +68,11 @@ public class UserServiceImpl implements UserService {
         userDetail.setName(user.getName());
         userDetail.setUserId(user.getUserId());
         userDetailResponse.setUser(userDetail);
-        ResponseEntity<List<UserTransaction>> userTransactions = client.getUserTransactions(user.getUserId());
+        ResponseDto<List<UserTransaction>> userTransactions = client.getUserTransactions(user.getUserId());
         if(userTransactions == null) {
             throw new ClientException("Failed in Transaction API");
         }
-        userDetailResponse.setTransactions(userTransactions.getBody());
+        userDetailResponse.setTransactions(userTransactions.getData());
         return userDetailResponse;
     }
 

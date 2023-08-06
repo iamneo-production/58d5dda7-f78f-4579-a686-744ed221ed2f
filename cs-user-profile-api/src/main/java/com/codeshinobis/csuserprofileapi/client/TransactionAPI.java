@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.codeshinobis.csuserprofileapi.model.ResponseDto;
 import com.codeshinobis.csuserprofileapi.model.UserTransaction;
 
 @Component
@@ -15,6 +16,6 @@ import com.codeshinobis.csuserprofileapi.model.UserTransaction;
 public interface TransactionAPI {
 
     @GetMapping("/api/cs/exchange-transactions/transactions/{userId}")
-    ResponseEntity<List<UserTransaction>> getUserTransactions(@PathVariable String userId);
+    ResponseDto<List<UserTransaction>> getUserTransactions(@PathVariable String userId);
     
 }

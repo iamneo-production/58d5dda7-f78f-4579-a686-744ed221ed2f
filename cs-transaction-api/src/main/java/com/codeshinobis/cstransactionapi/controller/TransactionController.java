@@ -27,8 +27,8 @@ public class TransactionController {
 	TransactionService transactionService;
 
 	@GetMapping("/transactions/{userId}")
-	public ResponseEntity<List<Transaction>>  getAllTransactionByUserId(@PathVariable String userId) {
-		return this.transactionService.getAllTransactionByUserId(userId);
+	public ResponseEntity<ResponseDto<List<Transaction>>>  getAllTransactionByUserId(@PathVariable String userId) {
+		return ResponseEntity.ok(ResponseDto.forSuccess(this.transactionService.getAllTransactionByUserId(userId)));
 	}
 
 	@GetMapping("/transactions")

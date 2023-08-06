@@ -36,8 +36,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             throw new CsException(CsErrorCodes.UNAUTHORIZED_USER);
         }
 
-        String userID = "Arun";
-//        String userID = validateTokenAndGetUserID(token);
+        String userID = validateTokenAndGetUserID(token);
         request.setAttribute("USER_ID", userID);
         return true;
     }
