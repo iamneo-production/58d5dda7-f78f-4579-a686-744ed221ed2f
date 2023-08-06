@@ -1,13 +1,11 @@
 package com.codeshinobis.cscurrencyexchangeapi.service;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import com.codeshinobis.cscurrencyexchangeapi.model.ResponseDto;
+import com.codeshinobis.cscurrencyexchangeapi.model.request.ExchangeRequest;
+import com.codeshinobis.cscurrencyexchangeapi.model.response.ExchangeResponse;
 
-import java.util.Collections;
-import java.util.List;
+public interface ExchangeService {
 
-@Service
-@Slf4j
-public class ExchangeService {
+    ResponseDto<ExchangeResponse> createExchangeTransaction(String userID, ExchangeRequest exchangeRequest);
 
 }
