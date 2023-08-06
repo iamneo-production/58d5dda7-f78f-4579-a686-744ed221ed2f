@@ -36,7 +36,7 @@ public class UserController {
 
     @GetMapping("/user-details/{userId}")
     public ResponseEntity<ResponseDto<UserDetailResponse>> getUserDetails(@PathVariable String userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.forSuccess(new UserDetailResponse()));
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseDto.forSuccess(service.getUserWithTransaction(userId)));
     }
     
 }

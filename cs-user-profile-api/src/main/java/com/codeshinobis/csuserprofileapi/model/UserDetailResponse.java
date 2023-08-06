@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class UserDetailResponse {
 
-    private User user;
+    private UserDetail user;
     private List<UserTransaction> transactions;
     
 }

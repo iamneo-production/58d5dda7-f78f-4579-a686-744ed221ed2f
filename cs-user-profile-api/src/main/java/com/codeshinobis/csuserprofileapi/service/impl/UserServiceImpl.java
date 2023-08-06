@@ -1,15 +1,22 @@
 package com.codeshinobis.csuserprofileapi.service.impl;
 
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.codeshinobis.csuserprofileapi.client.TransactionAPI;
+import com.codeshinobis.csuserprofileapi.exception.ClientException;
 import com.codeshinobis.csuserprofileapi.exception.InvalidRequestException;
+import com.codeshinobis.csuserprofileapi.model.UserDetail;
 import com.codeshinobis.csuserprofileapi.model.UserDetailResponse;
 import com.codeshinobis.csuserprofileapi.model.UserRequest;
 import com.codeshinobis.csuserprofileapi.model.UserResponse;
+import com.codeshinobis.csuserprofileapi.model.UserTransaction;
 import com.codeshinobis.csuserprofileapi.repo.UserRepository;
 import com.codeshinobis.csuserprofileapi.repo.entity.User;
 import com.codeshinobis.csuserprofileapi.service.UserService;
@@ -19,6 +26,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repo;
+
+    @Autowired
+    private TransactionAPI client;
 
     String secret = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
 
@@ -41,10 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse getUser(String userId) {
-        if(StringUtils.isBlank(userId)) {
-            throw new InvalidRequestException("Invalid User Id");
-        }
-        User user = repo.findByUserId(userId);
+        User user = validateAndGetUser(userId);
         UserResponse userResponse = new UserResponse();
         userResponse.setName(user.getName());
         userResponse.setUserId(user.getUserId());
@@ -54,7 +61,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailResponse getUserWithTransaction(String userId) {
-        return new UserDetailResponse();
+        User user = validateAndGetUser(userId);
+        UserDetailResponse userDetailResponse = new UserDetailResponse();
+        UserDetail userDetail = new UserDetail();
+        userDetail.setName(user.getName());
+        userDetail.setUserId(user.getUserId());
+        userDetailResponse.setUser(userDetail);
+        ResponseEntity<List<UserTransaction>> userTransactions = client.getUserTransactions(user.getUserId());
+        if(userTransactions == null) {
+            throw new ClientException("Failed in Transaction API");
+        }
+        userDetailResponse.setTransactions(userTransactions.getBody());
+        return userDetailResponse;
     }
 
     private void validateUser(UserRequest user) {
@@ -62,6 +80,17 @@ public class UserServiceImpl implements UserService {
             StringUtils.isBlank(user.getName()) || StringUtils.isBlank(user.getPassword())) {
                 throw new InvalidRequestException("Invalid User Request");
             } 
+    }
+
+    private User validateAndGetUser(String userId) {
+        if(StringUtils.isBlank(userId)) {
+            throw new InvalidRequestException("Invalid User Id");
+        }
+        User user = repo.findByUserId(userId);
+        if(user == null) {
+            throw new InvalidRequestException("No User Found for User Id : " + userId);
+        }
+        return user;
     }
 
     

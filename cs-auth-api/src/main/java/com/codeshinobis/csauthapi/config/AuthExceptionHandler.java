@@ -34,7 +34,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(value = ClientException.class)
     public ResponseEntity<ResponseDto<Object>> handleClientException(ClientException ex) {
         ErrorDto error = new ErrorDto(ex.getErrorCode(), ex.getErrorMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.forError(Arrays.asList(error)));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.forError(Arrays.asList(error)));
     }
 
     @ExceptionHandler(value = SignatureException.class)
@@ -46,7 +46,7 @@ public class AuthExceptionHandler {
     @ExceptionHandler(value = RuntimeException.class)
     public ResponseEntity<ResponseDto<Object>> handleRuntimeException(RuntimeException ex) {
         ErrorDto error = new ErrorDto(UNKNOWN_ERROR_CODE, ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ResponseDto.forError(Arrays.asList(error)));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ResponseDto.forError(Arrays.asList(error)));
     }
 
 }
