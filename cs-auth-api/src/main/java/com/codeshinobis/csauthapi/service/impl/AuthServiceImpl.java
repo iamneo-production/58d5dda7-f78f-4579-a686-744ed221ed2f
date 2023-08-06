@@ -2,9 +2,11 @@ package com.codeshinobis.csauthapi.service.impl;
 
 import com.codeshinobis.csauthapi.client.UserAPI;
 import com.codeshinobis.csauthapi.client.model.User;
+import com.codeshinobis.csauthapi.exception.ClientException;
 import com.codeshinobis.csauthapi.exception.InvalidRequestException;
 import com.codeshinobis.csauthapi.exception.TokenException;
 import com.codeshinobis.csauthapi.model.AuthRequest;
+import com.codeshinobis.csauthapi.model.ResponseDto;
 import com.codeshinobis.csauthapi.model.Token;
 import com.codeshinobis.csauthapi.service.AuthService;
 import io.jsonwebtoken.Claims;
@@ -12,7 +14,9 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang.StringUtils;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -76,11 +80,21 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidRequestException("Invalid User Request");
         }
 
-        User user = apiService.getUser(request.getUserId());
-        if(user.getPassword() != request.getPassword()) {
-            throw new InvalidRequestException("Password Mismatch");
+        ResponseEntity<ResponseDto<User>> clientResponse = apiService.getUser(request.getUserId());
+
+        if(clientResponse == null || clientResponse.getBody() == null || clientResponse.getBody().getData() == null) {
+            throw new ClientException("No Data returned in User API");
         }
 
+        User user = clientResponse.getBody().getData();
+        
+        StandardPBEStringEncryptor decryptor = new StandardPBEStringEncryptor();
+        decryptor.setPassword(secret);
+        String decryptedPassword = decryptor.decrypt(user.getPassword());
+
+        if(!decryptedPassword.equals(request.getPassword())) {
+            throw new InvalidRequestException("Password Mismatch");
+        }
         return true;
     }
     

@@ -2,6 +2,7 @@ package com.codeshinobis.csuserprofileapi.service.impl;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository repo;
 
+    String secret = "asdfSFS34wfsdfsdfSDSD32dfsddDDerQSNCK34SOWEK5354fdgdf4";
+
     @Override
     public void registerUser(UserRequest user) {
         validateUser(user);
@@ -26,10 +29,13 @@ public class UserServiceImpl implements UserService {
         if(existingUser != null) {
             throw new InvalidRequestException("UserId is already Exist");
         }
+        StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+        encryptor.setPassword(secret);
+        String encryptedPassword = encryptor.encrypt(user.getPassword());
         User userEntity = new User();
         userEntity.setName(user.getName());
         userEntity.setUserId(user.getUserId());
-        userEntity.setPassword(user.getPassword());
+        userEntity.setPassword(encryptedPassword);
         repo.save(userEntity);
     }
 
