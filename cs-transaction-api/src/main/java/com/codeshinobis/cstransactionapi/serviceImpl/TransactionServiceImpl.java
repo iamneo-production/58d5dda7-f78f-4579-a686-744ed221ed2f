@@ -25,19 +25,13 @@ public class TransactionServiceImpl implements TransactionService {
 	@Autowired
 	TransactionRepository transactionRepo;
 	
-	@Autowired
-	ModelMapper modelMapper;
-	
 	final Logger logger= LoggerFactory.getLogger(TransactionService.class);
 
 
 	@Override
 	public TransactionResponse createTransaction(TransactionRequest transactionRequest) {
-		
-		
-		
 		if( transactionRequest==null) throw new IllegalArgumentException();
-		Transaction transaction=modelMapper.map(transactionRequest, Transaction.class);
+		Transaction transaction=mapTransaction(transactionRequest);
 		logger.info("transaction is :"+transaction);
 		
 		String ldt=LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
@@ -91,9 +85,17 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		
 		return new ResponseEntity<List<Transaction>>(Collections.emptyList(), HttpStatus.INTERNAL_SERVER_ERROR);
-		
-		
-		
+	}
+
+	private Transaction mapTransaction(TransactionRequest request) {
+		Transaction transaction = new Transaction();
+		transaction.setConvertedAmount(request.getConvertedAmount());
+		transaction.setRequestAmount(request.getRequestAmount());
+		transaction.setSourceCurrency(request.getSourceCurrency());
+		transaction.setTargetCurrency(request.getTargetCurrency());
+		transaction.setExchangeRate(request.getExchangeRate());
+		transaction.setUserId(request.getUserId());
+		return transaction;
 	}
 
 }
