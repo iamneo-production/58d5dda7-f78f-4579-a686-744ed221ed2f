@@ -1,38 +1,24 @@
 package com.codeshinobis.cscurrencyratesapi.model;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-//@AllArgsConstructor
-public class ResponseDto {
+@AllArgsConstructor
+public class ResponseDto<T> {
 
-	private String status;
-	private Double exchange_data;
-//	private List<ErrorDto> errors;
-	
-	public String getStatus() {
-		return status;
-	}
-	public ResponseDto() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public ResponseDto(String status, Double exchange_data) {
-	super();
-	this.status = status;
-	this.exchange_data = exchange_data;
-}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public Double getExchange_data() {
-		return exchange_data;
-	}
-	public void setExchange_data(Double exchange_data) {
-		this.exchange_data = exchange_data;
-	}
-	
-	
-	
+	 private String status;
+	 private T data;
+	 private List<ErrorDto> errors;
+	 
+	 public static <T> ResponseDto<T> forSuccess(T data) {
+		 return new ResponseDto<>("SUCCESS", data, null);
+	 }
+
+	 public static ResponseDto<Object> forError(List<ErrorDto> errors) {
+	    return new ResponseDto<>("ERROR", null, errors);
+	 }
+
 }
