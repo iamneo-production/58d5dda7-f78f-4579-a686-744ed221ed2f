@@ -23,7 +23,7 @@ import com.codeshinobis.cscurrencyratesapi.service.CurrencyRatesService;
 
 
 @RestController
-@RequestMapping("/api/rates")
+@RequestMapping("/api/currency-rates")
 public class CurrencyRatesController {
 
 	@Autowired
@@ -32,7 +32,7 @@ public class CurrencyRatesController {
 	@Autowired
 	CurrencyExchangeRatesRepo repo;
 	
-	@GetMapping("/{sourceCurrency}/{targetCurrency}")
+	@GetMapping("/rates/{sourceCurrency}/{targetCurrency}")
 	public ResponseEntity<ResponseDto<Object>> getCurrencyExchangeRates(
 	        @PathVariable("sourceCurrency") String sourceCurrency,
 	        @PathVariable("targetCurrency") String targetCurrency) throws SourceCurrencyException, TargetCurrencyException {
