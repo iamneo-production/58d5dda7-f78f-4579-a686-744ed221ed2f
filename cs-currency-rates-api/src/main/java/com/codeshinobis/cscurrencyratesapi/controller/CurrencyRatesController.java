@@ -32,11 +32,6 @@ public class CurrencyRatesController {
 	@Autowired
 	CurrencyExchangeRatesRepo repo;
 	
-	@GetMapping("/hi")
-	public ResponseEntity<String> sayHello(){
-		return ResponseEntity.ok("hello");
-	}
-	
 	@GetMapping("/{sourceCurrency}/{targetCurrency}")
 	public ResponseEntity<ResponseDto<Object>> getCurrencyExchangeRates(
 	        @PathVariable("sourceCurrency") String sourceCurrency,
