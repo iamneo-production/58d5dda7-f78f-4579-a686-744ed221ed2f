@@ -40,9 +40,7 @@ public class TransactionServiceImpl implements TransactionService {
 		
 		Transaction response=transactionRepo.save(transaction);
 		logger.info("save transaction : "+ response);
-		return  new TransactionResponse("success",response,null);
-		
-		
+		return mapTransactionResponse(response);
 	}
 
 	@Override
@@ -75,8 +73,8 @@ public class TransactionServiceImpl implements TransactionService {
 		try {
 			
 			logger.info("transaction by userid");
-			System.out.println(this.transactionRepo.getByUserId(userId));
-			if(this.transactionRepo.getByUserId(userId).size() > 0) return new ResponseEntity<List<Transaction>>(this.transactionRepo.getAllByUserId(userId), HttpStatus.OK);
+			System.out.println(this.transactionRepo.getByUserID(userId));
+			if(this.transactionRepo.getByUserID(userId).size() > 0) return new ResponseEntity<List<Transaction>>(this.transactionRepo.getAllByUserID(userId), HttpStatus.OK);
 			return new ResponseEntity<List<Transaction>>(Collections.emptyList(), HttpStatus.BAD_REQUEST);
 			//throw new Exception("something");
 			
@@ -94,8 +92,21 @@ public class TransactionServiceImpl implements TransactionService {
 		transaction.setSourceCurrency(request.getSourceCurrency());
 		transaction.setTargetCurrency(request.getTargetCurrency());
 		transaction.setExchangeRate(request.getExchangeRate());
-		transaction.setUserId(request.getUserId());
+		transaction.setUserID(request.getUserID());
 		return transaction;
+	}
+
+	private TransactionResponse mapTransactionResponse(Transaction transaction) {
+		TransactionResponse response = new TransactionResponse();
+		response.setConvertedAmount(transaction.getConvertedAmount());
+		response.setRequestAmount(transaction.getRequestAmount());
+		response.setSourceCurrency(transaction.getSourceCurrency());
+		response.setTargetCurrency(transaction.getTargetCurrency());
+		response.setExchangeRate(transaction.getExchangeRate());
+		response.setUserID(transaction.getUserID());
+		response.setTransactionID(transaction.getTransactionID());
+		response.setTransactionDateTime(new Date());
+		return response;
 	}
 
 }

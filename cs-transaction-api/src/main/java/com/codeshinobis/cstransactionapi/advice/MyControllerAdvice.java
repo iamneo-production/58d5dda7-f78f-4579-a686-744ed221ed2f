@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestControllerAdvice
+@Slf4j
 public class MyControllerAdvice extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<ErrorMessage> somethingWentWrong(Exception ex){
+		log.error(ex.getMessage());
 		ErrorMessage exceptionResponse = new ErrorMessage(ex.getMessage(), "Something went wrong");
 		return new ResponseEntity<ErrorMessage>(exceptionResponse, new HttpHeaders(), HttpStatus.SC_INTERNAL_SERVER_ERROR);
 	}

@@ -1,98 +1,33 @@
 package com.codeshinobis.cstransactionapi.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jdk.jfr.DataAmount;
-import lombok.Builder;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="exchange_transactions")
 public class Transaction {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long transactionId;
+	@Column(name="transaction_id")
+	long transactionID;
 	String sourceCurrency;
 	String targetCurrency;
 	double requestAmount;
 	double convertedAmount;
 	double exchangeRate;
 	String transactionDateTime;
-	String userId;
-	public long getId() {
-		return transactionId;
-	}
-	public void setId(long transactionId) {
-		this.transactionId = transactionId;
-	}
-	public String getSourceCurrency() {
-		return sourceCurrency;
-	}
-	public void setSourceCurrency(String sourceCurrency) {
-		this.sourceCurrency = sourceCurrency;
-	}
-	public String getTargetCurrency() {
-		return targetCurrency;
-	}
-	public void setTargetCurrency(String targetCurrency) {
-		this.targetCurrency = targetCurrency;
-	}
-	public double getRequestAmount() {
-		return requestAmount;
-	}
-	public void setRequestAmount(double requestAmount) {
-		this.requestAmount = requestAmount;
-	}
-	public double getConvertedAmount() {
-		return convertedAmount;
-	}
-	public void setConvertedAmount(double convertedAmount) {
-		this.convertedAmount = convertedAmount;
-	}
-	public double getExchangeRate() {
-		return exchangeRate;
-	}
-	public void setExchangeRate(double exchangeRate) {
-		this.exchangeRate = exchangeRate;
-	}
-	public String getTransactionDateTime() {
-		return transactionDateTime;
-	}
-	public void setTransactionDateTime(String transactionDateTime) {
-		this.transactionDateTime = transactionDateTime;
-	}
-	public String getUserId() {
-		return userId;
-	}
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-	public Transaction(long transactionId, String sourceCurrency, String targetCurrency, double requestAmount,
-			double convertedAmount, double exchangeRate, String transactionDataTime, String userId) {
-		super();
-		this.transactionId = transactionId;
-		this.sourceCurrency = sourceCurrency;
-		this.targetCurrency = targetCurrency;
-		this.requestAmount = requestAmount;
-		this.convertedAmount = convertedAmount;
-		this.exchangeRate = exchangeRate;
-		this.transactionDateTime = transactionDateTime;
-		this.userId = userId;
-	}
-	public Transaction() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	@Override
-	public String toString() {
-		return "Transaction [transactionId=" + transactionId + ", sourceCurrency=" + sourceCurrency + ", targetCurrency=" + targetCurrency
-				+ ", requestAmount=" + requestAmount + ", convertedAmount=" + convertedAmount + ", exchangeRate="
-				+ exchangeRate + ", transactionDateTime=" + transactionDateTime + ", userId=" + userId + "]";
-	}
-	
-	
+	@Column(name="user_id")
+	String userID;
 
 }

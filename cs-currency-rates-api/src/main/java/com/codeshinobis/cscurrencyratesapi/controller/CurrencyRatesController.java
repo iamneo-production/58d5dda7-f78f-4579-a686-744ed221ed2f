@@ -17,6 +17,7 @@ import com.codeshinobis.cscurrencyratesapi.exception.SourceCurrencyException;
 import com.codeshinobis.cscurrencyratesapi.exception.TargetCurrencyException;
 import com.codeshinobis.cscurrencyratesapi.model.CurrencyExchangeRates;
 import com.codeshinobis.cscurrencyratesapi.model.ErrorDto;
+import com.codeshinobis.cscurrencyratesapi.model.RatesResponse;
 import com.codeshinobis.cscurrencyratesapi.model.ResponseDto;
 import com.codeshinobis.cscurrencyratesapi.repo.CurrencyExchangeRatesRepo;
 import com.codeshinobis.cscurrencyratesapi.service.CurrencyRatesService;
@@ -41,7 +42,7 @@ public class CurrencyRatesController {
 	                .orElseThrow(NoSuchElementException::new);
 	        double exchange_rate = rate.getExchange_rate();
 	        //ResponseDto<Double> responseDto = ResponseDto.forSuccess(exchange_rate);
-	        return ResponseEntity.ok(ResponseDto.forSuccess(exchange_rate));
+	        return ResponseEntity.ok(ResponseDto.forSuccess(new RatesResponse(exchange_rate)));
 	    } catch (NoSuchElementException e) {
 	        List<ErrorDto> errorList = new ArrayList<>();
 	        

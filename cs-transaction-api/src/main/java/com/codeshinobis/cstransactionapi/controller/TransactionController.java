@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codeshinobis.cstransactionapi.dto.ResponseDto;
 import com.codeshinobis.cstransactionapi.dto.TransactionRequest;
 import com.codeshinobis.cstransactionapi.dto.TransactionResponse;
 import com.codeshinobis.cstransactionapi.entity.Transaction;
@@ -24,8 +25,6 @@ public class TransactionController {
 	
 	@Autowired
 	TransactionService transactionService;
-	
-
 
 	@GetMapping("/transactions/{userId}")
 	public ResponseEntity<List<Transaction>>  getAllTransactionByUserId(@PathVariable String userId) {
@@ -38,10 +37,10 @@ public class TransactionController {
 	}
 
 	@PostMapping("/transaction")
-	public ResponseEntity<TransactionResponse> saveTransaction(@RequestBody TransactionRequest transactionRequest) {
+	public ResponseEntity<ResponseDto<TransactionResponse>> saveTransaction(@RequestBody TransactionRequest transactionRequest) {
 		System.out.println(transactionRequest);
-		TransactionResponse res= transactionService.createTransaction(transactionRequest);
-        return new ResponseEntity<TransactionResponse>(res, HttpStatus.OK);
+		TransactionResponse res = transactionService.createTransaction(transactionRequest);
+        return ResponseEntity.ok(ResponseDto.forSuccess(res));
 
 	}
 	@GetMapping("/transaction/{Id}")

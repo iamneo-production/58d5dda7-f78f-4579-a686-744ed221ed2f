@@ -11,11 +11,11 @@ import com.codeshinobis.cstransactionapi.entity.Transaction;
 @Repository
 public interface TransactionRepository extends CrudRepository<Transaction, Long> {
 	
-	public List<Transaction> getByUserId(String userId);
+	public List<Transaction> getByUserID(String userId);
 
-	@Query(value = "SELECT * FROM transaction WHERE user_id=?", nativeQuery = true)
-	public List<Transaction> getAllByUserId(String userId);
+	@Query(value = "SELECT * FROM exchange_transactions WHERE user_id=?", nativeQuery = true)
+	public List<Transaction> getAllByUserID(String userId);
 	
-	public boolean findByUserId(String userId);
+	public boolean findByUserID(String userId);
 
 }
