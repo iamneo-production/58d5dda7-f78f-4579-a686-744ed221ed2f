@@ -13,3 +13,8 @@ eureka:
 spring:
   application:
     name: cs-currency-exchange-api
+
+api:
+  client:
+    ratesApiUrl: http://cs-currency-rates-api
+    transactionApiUrl: http://cs-transaction-api
